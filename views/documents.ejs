@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Documents - Healthtraco</title>
+    <link rel="stylesheet" href="/css/documents.css">
+</head>
+<body>
+    <header class="documents-header">
+        <div class="container">
+            <h1>Your Uploaded Documents</h1>
+            <p>Securely manage and view your health-related documents.</p>
+        </div>
+    </header>
+
+    <main class="documents-main">
+        <div class="container">
+            <section class="documents-list">
+                <% if (documents && documents.length > 0) { %>
+                    <ul class="document-list">
+                        <% documents.forEach(doc => { %>
+                            <li class="document-item">
+                                <div class="document-info">
+                                    <h2><%= doc.documentName %></h2>
+                                    <p>Uploaded on: <%= new Date(doc.uploadedAt).toLocaleDateString() %></p>
+                                </div>
+                                <div class="document-actions">
+                                    <a href="/documents/view/<%= doc.filename %>" class="btn view-btn" target="_blank" aria-label="View <%= doc.documentName %>">
+                                        View Document
+                                    </a>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } else { %>
+                    <p class="no-documents">You haven’t uploaded any documents yet.</p>
+                <% } %>
+            </section>
+        </div>
+    </main>
+
+    <footer class="documents-footer">
+        <p>&copy; 2024 Healthtraco. Your health, our priority.</p>
+    </footer>
+</body>
+</html>

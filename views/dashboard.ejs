@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Healthtraco Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <div class="container">
+        <h1>Welcome, <%= user.name %>!</h1>
+        <p>Your health, our priority. Manage your documents securely here.</p>
+        <br />
+        <form action="/logout" method="POST">
+          <!-- Logout button -->
+          <button type="submit" class="btn logout-btn">Logout</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+      <div class="container">
+        <div class="content-wrapper">
+          <section class="left-section">
+            <blockquote class="motivating-quote">
+              "Your health is your wealth. Keep your records safe and your mind
+              at ease."
+              <footer>- Unknown</footer>
+            </blockquote>
+          </section>
+
+          <section class="right-section">
+            <div class="card document-card">
+              <h2>Manage Your Documents</h2>
+              <div class="card-content">
+                <div class="upload-section">
+                  <h3>Upload a Document</h3>
+                  <form
+                    action="/documents/upload"
+                    method="POST"
+                    enctype="multipart/form-data"
+                  >
+                    <label for="documentName">Document Name:</label>
+                    <input
+                      type="text"
+                      name="documentName"
+                      id="documentName"
+                      placeholder="Enter document name"
+                      required
+                    />
+
+                    <label for="document">Upload File:</label>
+                    <input type="file" name="document" id="document" required />
+
+                    <button type="submit">Upload</button>
+                  </form>
+                </div>
+
+                <div class="view-section">
+                  <h3>Your Documents</h3>
+                  <p>Access and manage your uploaded health records easily.</p>
+                  <a href="/documents" class="btn">View Uploaded Documents</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="dashboard-footer">
+      <p>
+        &copy; 2024 Healthtraco. Your trusted partner in health document
+        management.
+      </p>
+    </footer>
+  </body>
+</html>

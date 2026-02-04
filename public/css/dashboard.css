@@ -1,0 +1,187 @@
+/* General Styling */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('sign.img.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styling */
+.dashboard-header {
+    background: rgba(0, 123, 255, 0.8);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.dashboard-header p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Main Section Styling */
+.dashboard-main {
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Left Section for Quote */
+.left-section {
+    flex: 1;
+    min-width: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.motivating-quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.motivating-quote footer {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Document Card Styling */
+.document-card {
+    flex: 2;
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.document-card h2 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.upload-section,
+.view-section {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    background: rgba(248, 249, 250, 1);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section h3,
+.view-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.upload-section form {
+    margin-top: 15px;
+}
+
+.upload-section label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.upload-section input[type="file"] {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.upload-section button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.upload-section button:hover {
+    background-color: #0056b3;
+}
+
+.view-section p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.view-section a {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 18px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.view-section a:hover {
+    background-color: #218838;
+}
+
+/* Footer Styling */
+.dashboard-footer {
+    background-color: rgba(51, 51, 51, 0.9);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9rem;
+    margin-top: 40px;
+    border-radius: 10px;
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Upload Document</title>
+</head>
+<body>
+<header>
+    <h1>Upload Health Document</h1>
+</header>
+<div class="container">
+    <form action="/dashboard/upload" method="POST" enctype="multipart/form-data">
+        <label for="document">Upload a Document:</label>
+        <input type="file" id="document" name="document" required />
+        <button type="submit">Upload</button>
+      </form>
+      
+</div>
+</body>
+</html>
