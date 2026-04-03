@@ -68,7 +68,7 @@
   </style>
 </head>
 <body>
-  <header class="header">
+  <header class="header animate-slide">
     <div class="container">
       <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
       <nav class="nav-links">
@@ -84,7 +84,7 @@
     <div class="dashboard-grid">
       
       <!-- Left Column -->
-      <aside>
+      <aside class="animate-slide delay-1">
         <div class="welcome-card">
           <h1>Welcome, <%= user.name %>!</h1>
           <p><i class="fa-solid fa-lock"></i> Session secured. Your documents are securely vaulted.</p>
@@ -105,7 +105,7 @@
       </aside>
 
       <!-- Right Column -->
-      <section>
+      <section class="animate-slide delay-2">
         <div class="card">
           <h2><i class="fa-solid fa-cloud-arrow-up"></i> Upload New Protocol</h2>
           <p class="text-muted mb-2">Select a medical document, lab result, or health record to vault securely.</p>

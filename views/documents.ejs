@@ -58,7 +58,7 @@
   </style>
 </head>
 <body>
-  <header class="header">
+  <header class="header animate-slide">
     <div class="container">
       <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
       <nav class="nav-links">
@@ -70,14 +70,14 @@
     </div>
   </header>
 
-  <div class="vault-header">
+  <div class="vault-header animate-slide delay-1">
     <div class="container">
-      <h1><i class="fa-solid fa-vault"></i> Secure Document Vault</h1>
+      <h1><i class="fa-solid fa-vault float-icon"></i> Secure Document Vault</h1>
       <p>All files are strictly encrypted and retrieved via GridFS streams.</p>
     </div>
   </div>
 
-  <main class="container">
+  <main class="container animate-slide delay-2">
     <% if (documents && documents.length > 0) { %>
       <div class="doc-grid">
         <% documents.forEach(doc => { %>
