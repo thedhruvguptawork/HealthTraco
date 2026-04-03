@@ -3,104 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | HealthTraco</title>
-    <link rel="stylesheet" href="/css/signup.css">
+    <title>Sign Up - Healthtraco</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 160px);
+        margin: 40px 0;
+      }
+      .auth-card {
+        max-width: 500px;
+        width: 100%;
+        padding: 40px;
+      }
+      .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .auth-header h2 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+      }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">HealthTraco</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/signup" class="active">Sign Up</a></li>
-                <li><a href="/features">Features</a></li>
-                <li><a href="/about">About</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    <header class="header">
         <div class="container">
-            <h1>Create an Account</h1>
-            <form id="signupForm" method="POST" action="/signup" novalidate>
-                
-                <div class="input-group">
-                    <label for="name">Full Name <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-                    <small class="error-message" id="nameError"></small>
+            <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/login" class="btn btn-outline">Log In</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="auth-container container">
+        <div class="card auth-card">
+            <div class="auth-header">
+                <h2><i class="fa-solid fa-shield-check"></i> Register Vault</h2>
+                <p class="text-muted">Create your secure medical profile today.</p>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-error">
+                    <strong>Error:</strong> <%= error %>
                 </div>
-                
-                
-                <div class="input-group">
-                    <label for="email">Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                    <small class="error-message" id="emailError"></small>
+            <% } %>
+
+            <% if (typeof success !== 'undefined' && success) { %>
+                <div class="alert alert-success">
+                    <%= success %> <a href="/login">Click here to Login.</a>
                 </div>
-                
-                
-                <div class="input-group">
-                    <label for="password">Password <span class="required">*</span></label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="8">
-                    <small class="error-message" id="passwordError"></small>
+            <% } %>
+
+            <form action="/signup" method="POST">
+                <div class="form-group">
+                    <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
                 </div>
-                
-                
-                <div class="input-group">
-                    <label for="confirm-password">Confirm Password <span class="required">*</span></label>
-                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm your password" required>
-                    <small class="error-message" id="confirmPasswordError"></small>
+                <div class="form-group">
+                    <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="patient@example.com">
                 </div>
-                
-                
-                <button type="submit">Sign Up</button>
-                
-                
-                <p>Already have an account? <a href="/login">Login here</a></p>
+                <div class="form-group">
+                    <label for="password"><i class="fa-solid fa-key"></i> Strong Password</label>
+                    <input type="password" id="password" name="password" minlength="6" required placeholder="At least 6 characters">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fa-solid fa-lock"></i> Create Secure Account
+                </button>
             </form>
+            
+            <p class="text-center mt-2">
+                Already registered? <a href="/login">Log into your vault.</a>
+            </p>
         </div>
     </main>
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 HealthTraco. All rights reserved.</p>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Healthtraco. Your health, our priority.</p>
         </div>
     </footer>
-    
-    <script>
-        document.getElementById('signupForm').addEventListener('submit', function (event) {
-            const form = event.target;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const email = document.getElementById('email').value;
-
-            let valid = true;
-
-      
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
-                valid = false;
-            }
-
-            
-            if (password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match!';
-                valid = false;
-            }
-
-            
-            if (password.length < 8) {
-                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
-                valid = false;
-            }
-
-            if (!valid) {
-                event.preventDefault(); 
-                return;
-            }
-        });
-    </script>
 </body>
 </html>

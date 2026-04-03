@@ -7,28 +7,21 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
 const { body, validationResult } = require('express-validator');
 
-// Initialize express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));  // Ensure this points to the correct folder
+app.set('views', path.join(__dirname, 'views'));
 
-// MongoDB connection
 async function connectDB() {
     let retries = 5;
     while (retries) {
         try {
-            const conn = await mongoose.connect(process.env.MONGO_URI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
+            const conn = await mongoose.connect(process.env.MONGO_URI);
             console.log('MongoDB connected successfully.');
             return conn;
         } catch (error) {
@@ -43,7 +36,6 @@ async function connectDB() {
 
 const conn = connectDB();
 
-// GridFS setup
 let gfs;
 let bucket;
 
@@ -60,36 +52,26 @@ conn.then((db) => {
     gfs = db.connection.db.collection('documents.files');
 });
 
-// Multer GridFS Storage
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => ({
-        bucketName: 'documents',
-        filename: `${Date.now()}-${file.originalname}`,
-    }),
-});
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Session setup
 app.use(
     session({
         secret: process.env.SESSION_SECRET || 'your-secret-key',
         resave: false,
         saveUninitialized: true,
         store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-        cookie: { secure: false }, // Set secure: true in production with HTTPS
+        cookie: { secure: false },
     })
 );
 
-// Middleware to check authentication
 function ensureAuthenticated(req, res, next) {
     if (req.session.user) {
         return next();
     }
-    res.redirect('/login'); // Redirect to login if not authenticated
+    res.redirect('/login');
 }
 
-// User schema
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -97,7 +79,6 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Document schema
 const documentSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     documentName: { type: String, required: true },
@@ -106,12 +87,10 @@ const documentSchema = new mongoose.Schema({
 });
 const Document = mongoose.model('Document', documentSchema);
 
-// Routes
 app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
 
-// Signup routes
 app.get('/signup', (req, res) => res.render('signup', { error: null, success: null }));
 
 app.post(
@@ -158,7 +137,6 @@ app.post(
     }
 );
 
-// Login routes
 app.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
@@ -183,10 +161,7 @@ app.post(
                 return res.status(400).render('login', { error: 'Invalid email or password.' });
             }
 
-            // Set session user
             req.session.user = { id: user._id, name: user.name, email: user.email };
-
-            // Redirect to dashboard
             res.redirect('/dashboard');
         } catch (err) {
             console.error('Error during login:', err);
@@ -195,7 +170,6 @@ app.post(
     }
 );
 
-// Dashboard route
 app.get('/dashboard', ensureAuthenticated, async (req, res) => {
     try {
         const documents = await Document.find({ userId: req.session.user.id });
@@ -206,7 +180,6 @@ app.get('/dashboard', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// Document upload route
 app.post('/documents/upload', ensureAuthenticated, upload.single('document'), async (req, res) => {
     try {
         if (!req.file) {
@@ -218,21 +191,33 @@ app.post('/documents/upload', ensureAuthenticated, upload.single('document'), as
             return res.status(400).send('Document name is required.');
         }
 
-        const newDocument = new Document({
-            userId: req.session.user.id,
-            documentName,
-            filename: req.file.filename,
+        const filename = `${Date.now()}-${req.file.originalname}`;
+        const uploadStream = bucket.openUploadStream(filename, {
+            contentType: req.file.mimetype,
         });
 
-        await newDocument.save();
-        res.render('dashboard', { user: req.session.user, documents: await Document.find({ userId: req.session.user.id }), success: 'Document successfully uploaded!' });
+        uploadStream.on('error', (err) => {
+            console.error('GridFS upload error:', err);
+            res.status(500).send('File storage error.');
+        });
+
+        uploadStream.on('finish', async () => {
+            const newDocument = new Document({
+                userId: req.session.user.id,
+                documentName,
+                filename: filename,
+            });
+            await newDocument.save();
+            res.render('dashboard', { user: req.session.user, documents: await Document.find({ userId: req.session.user.id }), success: 'Document successfully uploaded!' });
+        });
+
+        uploadStream.end(req.file.buffer);
     } catch (err) {
         console.error('Error uploading document:', err);
         res.status(500).send('Error uploading document. Please try again later.');
     }
 });
 
-// Document view route
 app.get('/documents', ensureAuthenticated, async (req, res) => {
     try {
         const documents = await Document.find({ userId: req.session.user.id });
@@ -243,8 +228,6 @@ app.get('/documents', ensureAuthenticated, async (req, res) => {
     }
 });
 
-
-// View single document route
 app.get('/documents/view/:filename', ensureAuthenticated, async (req, res) => {
     try {
         const file = await gfs.find({ filename: req.params.filename }).toArray();
@@ -261,7 +244,6 @@ app.get('/documents/view/:filename', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// Download document route
 app.get('/documents/download/:filename', ensureAuthenticated, async (req, res) => {
     try {
         const file = await gfs.find({ filename: req.params.filename }).toArray();
@@ -279,7 +261,27 @@ app.get('/documents/download/:filename', ensureAuthenticated, async (req, res) =
     }
 });
 
-// Logout route
+app.post('/documents/delete/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const doc = await Document.findOne({ _id: req.params.id, userId: req.session.user.id });
+        if (!doc) {
+            return res.status(404).send('Document not found or access denied.');
+        }
+
+        const file = await gfs.find({ filename: doc.filename }).toArray();
+        if (file && file.length > 0) {
+            await bucket.delete(file[0]._id);
+        }
+
+        await Document.deleteOne({ _id: doc._id });
+
+        res.redirect('/documents');
+    } catch (err) {
+        console.error('Error deleting document:', err);
+        res.status(500).send('Error deleting document.');
+    }
+});
+
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -289,7 +291,15 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Start the server
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error logging out:', err);
+        }
+        res.redirect('/login');
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-}); 
+});

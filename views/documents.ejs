@@ -1,47 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Documents - Healthtraco</title>
-    <link rel="stylesheet" href="/css/documents.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Secured Vault - Healthtraco</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .vault-header {
+      background: linear-gradient(90deg, #1e293b, var(--primary-dark));
+      color: white;
+      padding: 40px 20px;
+      margin-bottom: 40px;
+      border-radius: 0 0 15px 15px;
+    }
+    .vault-header h1 { font-size: 2.2rem; }
+    
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+    .doc-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 5px solid var(--secondary-color);
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .doc-icon {
+      font-size: 2.5rem;
+      color: var(--primary-light);
+    }
+    .doc-title { margin-bottom: 5px; font-weight: 600; font-size: 1.1rem; }
+    .doc-meta { font-size: 0.85rem; color: var(--text-muted); }
+    .doc-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+    }
+    .doc-actions .btn { flex: 1; padding: 8px; font-size: 0.9rem; }
+    .no-docs {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-color);
+    }
+  </style>
 </head>
 <body>
-    <header class="documents-header">
-        <div class="container">
-            <h1>Your Uploaded Documents</h1>
-            <p>Securely manage and view your health-related documents.</p>
-        </div>
-    </header>
+  <header class="header">
+    <div class="container">
+      <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
+      <nav class="nav-links">
+        <a href="/dashboard" class="btn btn-outline"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <form action="/logout" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
 
-    <main class="documents-main">
-        <div class="container">
-            <section class="documents-list">
-                <% if (documents && documents.length > 0) { %>
-                    <ul class="document-list">
-                        <% documents.forEach(doc => { %>
-                            <li class="document-item">
-                                <div class="document-info">
-                                    <h2><%= doc.documentName %></h2>
-                                    <p>Uploaded on: <%= new Date(doc.uploadedAt).toLocaleDateString() %></p>
-                                </div>
-                                <div class="document-actions">
-                                    <a href="/documents/view/<%= doc.filename %>" class="btn view-btn" target="_blank" aria-label="View <%= doc.documentName %>">
-                                        View Document
-                                    </a>
-                                </div>
-                            </li>
-                        <% }) %>
-                    </ul>
-                <% } else { %>
-                    <p class="no-documents">You haven’t uploaded any documents yet.</p>
-                <% } %>
-            </section>
-        </div>
-    </main>
+  <div class="vault-header">
+    <div class="container">
+      <h1><i class="fa-solid fa-vault"></i> Secure Document Vault</h1>
+      <p>All files are strictly encrypted and retrieved via GridFS streams.</p>
+    </div>
+  </div>
 
-    <footer class="documents-footer">
-        <p>&copy; 2024 Healthtraco. Your health, our priority.</p>
-    </footer>
+  <main class="container">
+    <% if (documents && documents.length > 0) { %>
+      <div class="doc-grid">
+        <% documents.forEach(doc => { %>
+          <div class="card doc-card">
+            <div class="doc-header">
+              <div>
+                <div class="doc-title"><%= doc.documentName %></div>
+                <div class="doc-meta"><i class="fa-solid fa-calendar-alt"></i> Uploaded: <%= new Date(doc.uploadedAt).toLocaleDateString() %></div>
+              </div>
+              <div class="doc-icon"><i class="fa-solid fa-file-pdf"></i></div>
+            </div>
+            
+            <div class="doc-actions">
+              <a href="/documents/view/<%= doc.filename %>" target="_blank" class="btn btn-primary" title="View Securely">
+                <i class="fa-solid fa-eye"></i> View
+              </a>
+              <a href="/documents/download/<%= doc.filename %>" class="btn btn-secondary" title="Download Decrypted File">
+                <i class="fa-solid fa-download"></i> DL
+              </a>
+              <form action="/documents/delete/<%= doc._id %>" method="POST" style="display:inline; width:100%;" onsubmit="return confirm('Are you sure you want to permanently delete this document from the vault?');">
+                <button type="submit" class="btn btn-danger" style="width:100%;" title="Permanently Delete">
+                  <i class="fa-solid fa-trash-can"></i> Del
+                </button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="no-docs">
+        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+        <h2>Your vault is empty</h2>
+        <p class="text-muted mt-2 mb-2">You haven't uploaded any health records yet.</p>
+        <a href="/dashboard" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload your first document</a>
+      </div>
+    <% } %>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Healthtraco Digital Vault. Privacy is our policy.</p>
+    </div>
+  </footer>
 </body>
 </html>

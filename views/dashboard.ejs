@@ -1,79 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Healthtraco Dashboard</title>
-    <link rel="stylesheet" href="/css/dashboard.css" />
-  </head>
-  <body>
-    <header class="dashboard-header">
-      <div class="container">
-        <h1>Welcome, <%= user.name %>!</h1>
-        <p>Your health, our priority. Manage your documents securely here.</p>
-        <br />
-        <form action="/logout" method="POST">
-          <!-- Logout button -->
-          <button type="submit" class="btn logout-btn">Logout</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Vault - Healthtraco</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+      margin: 40px 0;
+    }
+    @media (max-width: 768px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+    .welcome-card {
+      background: linear-gradient(135deg, var(--secondary-dark), var(--secondary-light));
+      color: white;
+      padding: 30px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 30px;
+    }
+    .welcome-card h1 { font-size: 2rem; margin-bottom: 10px; }
+    .welcome-card p { opacity: 0.9; }
+    
+    .upload-area {
+      border: 2px dashed var(--border-color);
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: var(--radius-md);
+      transition: all 0.3s;
+      background-color: #fafbfc;
+    }
+    .upload-area:hover, .upload-area:focus-within {
+      border-color: var(--primary-color);
+      background-color: #f0f4f8;
+    }
+    .upload-area i {
+      font-size: 3rem;
+      color: var(--primary-light);
+      margin-bottom: 15px;
+    }
+    .docs-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    input[type="file"]::file-selector-button {
+      border: 2px solid var(--primary-color);
+      padding: 8px 16px;
+      border-radius: 6px;
+      background-color: #f8fafc;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    input[type="file"]::file-selector-button:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
+      <nav class="nav-links">
+        <a href="/documents" class="btn btn-outline"><i class="fa-solid fa-folder-open"></i> My Vault</a>
+        <form action="/logout" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </form>
-      </div>
-    </header>
+      </nav>
+    </div>
+  </header>
 
-    <main class="dashboard-main">
-      <div class="container">
-        <div class="content-wrapper">
-          <section class="left-section">
-            <blockquote class="motivating-quote">
-              "Your health is your wealth. Keep your records safe and your mind
-              at ease."
-              <footer>- Unknown</footer>
-            </blockquote>
-          </section>
-
-          <section class="right-section">
-            <div class="card document-card">
-              <h2>Manage Your Documents</h2>
-              <div class="card-content">
-                <div class="upload-section">
-                  <h3>Upload a Document</h3>
-                  <form
-                    action="/documents/upload"
-                    method="POST"
-                    enctype="multipart/form-data"
-                  >
-                    <label for="documentName">Document Name:</label>
-                    <input
-                      type="text"
-                      name="documentName"
-                      id="documentName"
-                      placeholder="Enter document name"
-                      required
-                    />
-
-                    <label for="document">Upload File:</label>
-                    <input type="file" name="document" id="document" required />
-
-                    <button type="submit">Upload</button>
-                  </form>
-                </div>
-
-                <div class="view-section">
-                  <h3>Your Documents</h3>
-                  <p>Access and manage your uploaded health records easily.</p>
-                  <a href="/documents" class="btn">View Uploaded Documents</a>
-                </div>
-              </div>
-            </div>
-          </section>
+  <main class="container">
+    <div class="dashboard-grid">
+      
+      <!-- Left Column -->
+      <aside>
+        <div class="welcome-card">
+          <h1>Welcome, <%= user.name %>!</h1>
+          <p><i class="fa-solid fa-lock"></i> Session secured. Your documents are securely vaulted.</p>
         </div>
-      </div>
-    </main>
+        
+        <div class="card">
+          <div class="docs-summary">
+            <h3>Vault Overview</h3>
+            <span class="badge" style="background:var(--primary-light); color:white; padding:4px 8px; border-radius:12px; font-size:0.8rem;">
+              <%= documents ? documents.length : 0 %> Files
+            </span>
+          </div>
+          <p class="text-muted"><i class="fa-solid fa-server"></i> Storage connected via MongoDB GridFS.</p>
+          <div class="mt-2 text-center">
+            <a href="/documents" class="btn btn-secondary" style="width: 100%;"><i class="fa-solid fa-eye"></i> View All Documents</a>
+          </div>
+        </div>
+      </aside>
 
-    <footer class="dashboard-footer">
-      <p>
-        &copy; 2024 Healthtraco. Your trusted partner in health document
-        management.
-      </p>
-    </footer>
-  </body>
+      <!-- Right Column -->
+      <section>
+        <div class="card">
+          <h2><i class="fa-solid fa-cloud-arrow-up"></i> Upload New Protocol</h2>
+          <p class="text-muted mb-2">Select a medical document, lab result, or health record to vault securely.</p>
+          
+          <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success">
+              <i class="fa-solid fa-check-circle"></i> <%= success %>
+            </div>
+          <% } %>
+
+          <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-error">
+              <i class="fa-solid fa-triangle-exclamation"></i> <%= error %>
+            </div>
+          <% } %>
+
+          <form action="/documents/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="documentName">Record Title</label>
+              <input type="text" name="documentName" id="documentName" placeholder="e.g. Blood Test Q1 2026" required />
+            </div>
+            
+            <div class="upload-area mb-2">
+              <i class="fa-solid fa-file-medical"></i>
+              <label for="document" style="display:block; margin-bottom:15px; font-weight:500;">Select secure file</label>
+              <input type="file" name="document" id="document" required style="border:none; box-shadow:none; background:transparent;" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fa-solid fa-shield-halved"></i> Secure Upload</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Healthtraco Digital Vault.</p>
+    </div>
+  </footer>
+</body>
 </html>

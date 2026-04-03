@@ -1,53 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthTraco | Home</title>
-    <link rel="stylesheet" href="/css/home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Healthtraco - Secure Health Documents</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+      color: white;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 40px;
+    }
+    .hero h1 { font-size: 3rem; margin-bottom: 15px; font-weight: 700; }
+    .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px; opacity: 0.9; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding-bottom: 60px;
+    }
+    .feature-card { text-align: center; }
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+      background: #e0f2f1;
+      width: 80px; height: 80px;
+      line-height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+    }
+    .feature-card h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--primary-dark); }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>HealthTraco</h1>
+  <header class="header">
+    <div class="container">
+      <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/login" class="btn btn-outline">Log In</a>
+        <a href="/signup" class="btn btn-primary">Sign Up</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <img src="/css/sign.img.png" alt="Medical Security Signature" style="max-width: 300px; width: 100%; height: auto; margin-bottom: 20px;">
+        <h1>Your Health Data, Securely Managed.</h1>
+        <p>Upload, store, and manage your medical documents securely in our MongoDB vault. Accessible anytime, anywhere.</p>
+        <div>
+          <a href="/signup" class="btn btn-secondary btn-lg"><i class="fa-solid fa-user-plus"></i> Get Started Securely</a>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/login">Health Records</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </nav>
-    </header>
+      </div>
+    </section>
 
-    <main>
-        <section class="hero">
-            <h2>Your Health, Simplified</h2>
-            <p>Track and manage your health records effortlessly with HealthTraco.</p>
-            <a href="/signup" class="btn">Get Started</a>
-            <!-- Features Button -->
-            <a href="/features" class="btn features-btn">Explore Features</a>
-        </section>
+    <div class="container">
+      <div class="features-grid">
+        <div class="card feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+          <h3>Digital Security First</h3>
+          <p>Your sessions are rigorously managed and protected utilizing industry-standard auth methods.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-file-medical"></i></div>
+          <h3>Unlimited Storage</h3>
+          <p>We leverage native MongoDB GridFS to split and securely store your highly confidential medical reports.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-laptop-medical"></i></div>
+          <h3>Remote Accessibility</h3>
+          <p>Whether you're at the hospital or traveling, pull up your life-saving documents in seconds across any device you own.</p>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        <section id="features" class="features">
-            <div class="feature">
-                <h3>Organized Records</h3>
-                <p>Store and access your medical history anytime, anywhere.</p>
-            </div>
-            <div class="feature">
-                <h3>Personalized Insights</h3>
-                <p>Get health recommendations tailored to your needs.</p>
-            </div>
-            <div class="feature">
-                <h3>Secure & Private</h3>
-                <p>Your data is encrypted and protected with top security measures.</p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 HealthTraco. All rights reserved.</p>
-    </footer>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Healthtraco. Your trusted partner in digital health document management.</p>
+    </div>
+  </footer>
 </body>
 </html>

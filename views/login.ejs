@@ -3,45 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | HealthTraco</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <title>Login - Healthtraco</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 160px);
+      }
+      .auth-card {
+        max-width: 450px;
+        width: 100%;
+        padding: 40px;
+      }
+      .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .auth-header h2 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+      }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>HealthTraco</h1>
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo"><i class="fa-solid fa-shield-heart"></i> Healthtraco</a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/signup" class="btn btn-outline">Sign Up</a>
+            </nav>
         </div>
     </header>
 
-    <main>
-        <section class="login-form">
-            <h2>Login to Your Account</h2>
-            
-            <!-- Display error message if any -->
-            <% if (error) { %>
-                <div class="error-message" style="color: red; font-weight: bold;">
-                    <%= error %>
+    <main class="auth-container container">
+        <div class="card auth-card">
+            <div class="auth-header">
+                <h2><i class="fa-solid fa-user-lock"></i> Secure Login</h2>
+                <p class="text-muted">Access your encrypted medical vault.</p>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-error">
+                    <strong>Error:</strong> <%= error %>
                 </div>
             <% } %>
 
-            <!-- Login form -->
             <form action="/login" method="POST">
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                <div class="form-group">
+                    <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="patient@example.com">
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="password"><i class="fa-solid fa-key"></i> Password</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    Login to Vault
+                </button>
             </form>
-            <p>Don't have an account? <a href="/signup">Sign up</a></p>
-        </section>
+            
+            <p class="text-center mt-2">
+                Don't have an account? <a href="/signup">Create one securely.</a>
+            </p>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2024 HealthTraco. All rights reserved.</p>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Healthtraco. Your health, our priority.</p>
+        </div>
     </footer>
 </body>
 </html>
